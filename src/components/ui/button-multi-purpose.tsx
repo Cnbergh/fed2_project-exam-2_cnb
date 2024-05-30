@@ -10,7 +10,7 @@ interface MultiPurposeButtonProps {
   icon?: IconType;
   }
   
-  const MPButton = ({
+  const Button = ({
     label,
   onClick,
   disabled = false,
@@ -43,4 +43,4 @@ interface MultiPurposeButtonProps {
     </button>
       );
     };
-  export default MPButton;
+  export default Button;

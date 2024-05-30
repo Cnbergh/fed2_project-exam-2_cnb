@@ -1,4 +1,10 @@
-import { SignUp_URL, Login_URL, ApiKey_URL, Profile_URL } from './constants';
+import {
+  SignUp_URL,
+  Login_URL,
+  ApiKey_URL,
+  Profile_URL,
+  Venues_URL,
+} from './constants';
 import fetcher from '../lib/fetcher';
 import { useAuth } from '../components/providers/auth_context';
 
@@ -88,10 +94,99 @@ export function useApi() {
     }
   }
 
+  // Venues related functions
+  async function fetchVenues() {
+    const url = Venues_URL;
+
+    try {
+      const response = await fetcher(url, { method: 'GET' });
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async function fetchVenueById(venueId) {
+    const url = `${Venues_URL}/${venueId}`;
+
+    try {
+      const response = await fetcher(url, { method: 'GET' });
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async function createVenue(venueData) {
+    const url = Venues_URL;
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authState.token}`,
+        'X-Noroff-API-Key': authState.apiKey,
+      },
+      body: JSON.stringify(venueData),
+    };
+
+    try {
+      const response = await fetcher(url, options);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async function updateVenue(venueId, venueData) {
+    const url = `${Venues_URL}/${venueId}`;
+
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authState.token}`,
+        'X-Noroff-API-Key': authState.apiKey,
+      },
+      body: JSON.stringify(venueData),
+    };
+
+    try {
+      const response = await fetcher(url, options);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async function deleteVenue(venueId) {
+    const url = `${Venues_URL}/${venueId}`;
+
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${authState.token}`,
+        'X-Noroff-API-Key': authState.apiKey,
+      },
+    };
+
+    try {
+      const response = await fetcher(url, options);
+      return response;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   return {
     registerUser,
     loginUser,
     updateProfile,
+    fetchVenues,
+    fetchVenueById,
+    createVenue,
+    updateVenue,
+    deleteVenue,
   };
 }
 
