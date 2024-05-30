@@ -1,15 +1,15 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import fetcher from "../../../lib/fetcher";
-import { Login_URL } from "../../../api/constants";
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import fetcher from '../../../lib/fetcher';
+import { Login_URL } from '../../../api/constants';
 
 export default NextAuth({
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         try {
@@ -25,14 +25,14 @@ export default NextAuth({
             return null;
           }
         } catch (error) {
-          console.error("Error during login:", error);
+          console.error('Error during login:', error);
           return null;
         }
       },
     }),
   ],
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   callbacks: {
     async jwt({ token, user }) {

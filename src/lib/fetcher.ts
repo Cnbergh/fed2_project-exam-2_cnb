@@ -1,9 +1,31 @@
-async function fetcher(url: string, options?: RequestInit) {
-    const res = await fetch(url, options);
-    if (!res.ok) {
-      throw new Error(`An error occurred: ${res.statusText}`);
+const fetcher = async (url, options = {}, token = null, apiKey = null) => {
+  const updateOptions = (options) => {
+    const updatedOptions = { ...options };
+    if (token) {
+      updatedOptions.headers = {
+        ...updatedOptions.headers,
+        Authorization: `Bearer ${token}`,
+      };
     }
-    return res.json();
+    if (apiKey) {
+      updatedOptions.headers = {
+        ...updatedOptions.headers,
+        'X-Noroff-API-Key': apiKey,
+      };
+    }
+    return updatedOptions;
+  };
+
+  const response = await fetch(url, updateOptions(options));
+  return handleResponse(response);
+};
+
+const handleResponse = (response) => {
+  if (!response.ok) {
+    console.error(`Error: ${response.statusText} (status: ${response.status})`);
+    throw new Error(response.statusText);
   }
-  
-  export default fetcher;
+  return response.json();
+};
+
+export default fetcher;

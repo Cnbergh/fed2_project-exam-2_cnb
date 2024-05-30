@@ -1,4 +1,3 @@
-
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { ReactNode, forwardRef, ForwardedRef } from 'react';
@@ -9,8 +8,12 @@ interface ModalProps {
   children: ReactNode;
 }
 
-export default function Modal({  open, onOpenChange, children, }: ModalProps) {
-  return <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>{children}</DialogPrimitive.Root>;
+export default function Modal({ open, onOpenChange, children }: ModalProps) {
+  return (
+    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+      {children}
+    </DialogPrimitive.Root>
+  );
 }
 
 interface ModalContentProps {
@@ -44,6 +47,6 @@ const ModalContent = forwardRef(function ModalContent(
 
 const ModalButton = DialogPrimitive.Trigger;
 const ModalClose = DialogPrimitive.Close;
-const ModalOverlay = DialogPrimitive.Overlay
+const ModalOverlay = DialogPrimitive.Overlay;
 
 export { ModalButton, ModalOverlay, ModalContent, ModalClose };
