@@ -25,6 +25,11 @@ const SignUpModal = ({ isOpen, onClose }) => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
+    if (!data.email.endsWith('@stud.noroff.no')) {
+      toast.error('You must register with a stud.noroff.no email address');
+      setIsLoading(false);
+      return;
+    }
     try {
       const response = await registerUser({
         email: data.email,

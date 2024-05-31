@@ -42,19 +42,36 @@ const EditVenuePage = ({ params }) => {
     }
   };
 
+  const onDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this venue?")) {
+      setIsLoading(true);
+      try {
+        await deleteVenue(id);
+        router.push('/venues');
+      } catch (error) {
+        console.error('Failed to delete venue:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
   return (
     <div>
-      <h1>Edit Venue</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register('name', { required: true })} placeholder="Name" />
-        <input {...register('description', { required: true })} placeholder="Description" />
-        <input {...register('price', { required: true })} placeholder="Price" type="number" />
-        <input {...register('maxGuests', { required: true })} placeholder="Max Guests" type="number" />
-        <input {...register('media[0].url')} placeholder="Media URL" />
-        <input {...register('media[0].alt')} placeholder="Media Alt Text" />
-        <button type="submit" disabled={isLoading}>Update Venue</button>
-      </form>
-    </div>
+    <h1>Edit Venue</h1>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register('name', { required: true })} placeholder="Name" />
+      <input {...register('description', { required: true })} placeholder="Description" />
+      <input {...register('price', { required: true })} placeholder="Price" type="number" />
+      <input {...register('maxGuests', { required: true })} placeholder="Max Guests" type="number" />
+      <input {...register('media[0].url')} placeholder="Media URL" />
+      <input {...register('media[0].alt')} placeholder="Media Alt Text" />
+      <button type="submit" disabled={isLoading}>Update Venue</button>
+    </form>
+    <button onClick={onDelete} disabled={isLoading} className="mt-4 bg-red-500 text-white font-bold py-2 px-4 rounded">
+      Delete Venue
+    </button>
+  </div>
   );
 };
 
