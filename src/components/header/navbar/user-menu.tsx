@@ -1,10 +1,12 @@
 'use client';
+
 import { AiOutlineMenu } from 'react-icons/ai';
 import MenuItem from './menu-item';
 import AvatarImage from '@/components/avatar';
 import { useCallback, useState, useEffect } from 'react';
 import SignUpModal from '@/components/modals/sign-up_modal';
 import LoginModal from '@/components/modals/login-modal';
+import UpdateAvatarModal from '@/components/modals/update-avatar_modal'; // Import the modal
 import { useAuth } from '@/components/providers/auth_context';
 import { useRouter } from 'next/navigation';
 
@@ -13,6 +15,7 @@ const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isUpdateAvatarOpen, setIsUpdateAvatarOpen] = useState(false); // State for avatar modal
   const toggleOpen = useCallback(
     () => setIsOpen((isOpen) => !isOpen),
     []
@@ -23,6 +26,7 @@ const UserMenu = () => {
     if (!authState.user) {
       setIsSignUpOpen(false);
       setIsLoginOpen(false);
+      setIsUpdateAvatarOpen(false); // Close avatar modal if not logged in
     }
   }, [authState.user]);
 
@@ -52,14 +56,14 @@ const UserMenu = () => {
         </div>
       </div>
       {isOpen && (
-        <div className="absolute rounded-xl shadow-md w-[40vw] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm">
+        <div className="absolute rounded-xl shadow-md w-[40vw] lg:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm">
           <div className="flex flex-col cursor-pointer">
             {authState.user ? (
               <>
                 <MenuItem onClick={() => handleNavigation("/venues")} label="View Venues" />
-                <MenuItem onClick={() => handleNavigation("/my-bookings")} label="My Bookings" />
-                <MenuItem onClick={() => handleNavigation("/manage-venues")} label="Manage Venues" />
-                <MenuItem onClick={() => handleNavigation("/update-avatar")} label="Update Avatar" />
+                <MenuItem onClick={() => handleNavigation("/bookings")} label="My Bookings" />
+                <MenuItem onClick={() => handleNavigation("/bookings/manage")} label="Manage Venues" />
+                <MenuItem onClick={() => setIsUpdateAvatarOpen(true)} label="Update Avatar" />
                 <hr />
                 <MenuItem onClick={logoutUser} label="Logout" />
               </>
@@ -74,6 +78,7 @@ const UserMenu = () => {
       )}
       <SignUpModal isOpen={isSignUpOpen} onClose={() => setIsSignUpOpen(false)} />
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <UpdateAvatarModal isOpen={isUpdateAvatarOpen} onClose={() => setIsUpdateAvatarOpen(false)} /> {/* Include the avatar modal */}
     </div>
   );
 };

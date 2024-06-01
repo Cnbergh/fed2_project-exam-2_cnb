@@ -30,7 +30,7 @@ const ManageVenueBookingsPage = () => {
         <h1 className="text-3xl font-bold mb-8">Bookings for Venue {id}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {bookings.map((booking) => (
-            <BookingCard key={booking.id} booking={booking} />
+            <div key={booking.id} booking={booking} />
           ))}
         </div>
       </Container>

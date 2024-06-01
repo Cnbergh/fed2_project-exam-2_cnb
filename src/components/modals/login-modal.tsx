@@ -31,6 +31,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         email: data.email,
         password: data.password,
       });
+      console.log('Login response:', response); // Debugging log
       saveUserData(response.data);
       toast.success('Logged in successfully');
       onClose();

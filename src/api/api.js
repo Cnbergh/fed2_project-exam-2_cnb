@@ -12,9 +12,28 @@ import { useAuth } from '../components/providers/auth_context';
 export function useApi() {
   const { authState, saveUserData, logoutUser } = useAuth();
 
-  async function fetchWithAuth(url, options = {}) {
-    if (!authState.token) {
-      throw new Error('No authorization token found. Please login.');
+  async function fetchWithAuth(url, options = {}, retry = true) {
+    console.log('Auth State before API call:', authState);
+
+    if (!authState.token || !authState.apiKey) {
+      console.log(
+        'Authorization token or API key not found. Attempting to create a new API key...'
+      );
+      try {
+        const apiKeyData = await createApiKey(authState.token);
+        saveUserData({ ...authState, apiKey: apiKeyData.data.key });
+        // Retry the original request
+        const headers = {
+          ...options.headers,
+          Authorization: `Bearer ${authState.token}`,
+          'X-Noroff-API-Key': apiKeyData.data.key,
+        };
+        return await fetcher(url, { ...options, headers });
+      } catch (error) {
+        throw new Error(
+          'Authorization token or API key not found. Please login.'
+        );
+      }
     }
 
     const headers = {
@@ -23,7 +42,19 @@ export function useApi() {
       'X-Noroff-API-Key': authState.apiKey,
     };
 
-    return await fetcher(url, { ...options, headers });
+    try {
+      return await fetcher(url, { ...options, headers });
+    } catch (error) {
+      if (
+        retry &&
+        error.message.includes('Authorization token or API key not found')
+      ) {
+        console.log('Retrying with new API key...');
+        return await fetchWithAuth(url, options, false);
+      } else {
+        throw error;
+      }
+    }
   }
 
   async function registerUser({ email, password, name, venueManager }) {
@@ -38,8 +69,7 @@ export function useApi() {
 
     try {
       const data = await fetcher(url, options);
-      saveUserData(data);
-      await createApiKey(data.accessToken);
+      saveUserData({ ...data.data, apiKey: null });
       return data;
     } catch (error) {
       handleError(error);
@@ -48,6 +78,7 @@ export function useApi() {
 
   async function createApiKey(accessToken) {
     const url = ApiKey_URL;
+    console.log('Creating API Key with accessToken:', accessToken);
 
     const options = {
       method: 'POST',
@@ -60,6 +91,7 @@ export function useApi() {
 
     try {
       const data = await fetcher(url, options);
+      console.log('API Key Created:', data);
       saveApiKey(data.data.key);
       return data;
     } catch (error) {
@@ -68,7 +100,9 @@ export function useApi() {
   }
 
   function saveApiKey(apiKey) {
+    console.log('Saving API Key:', apiKey);
     saveUserData({ ...authState, apiKey });
+    localStorage.setItem('authState', JSON.stringify({ ...authState, apiKey }));
   }
 
   async function loginUser({ email, password }) {
@@ -81,7 +115,10 @@ export function useApi() {
 
     try {
       const data = await fetcher(url, options);
-      saveUserData(data);
+      console.log('User Logged In:', data);
+      saveUserData({ ...data.data, apiKey: null });
+      const apiKeyData = await createApiKey(data.data.accessToken);
+      saveUserData({ ...data.data, apiKey: apiKeyData.data.key });
       return data;
     } catch (error) {
       handleError(error);
@@ -103,6 +140,17 @@ export function useApi() {
       const response = await fetchWithAuth(url, options);
       return response;
     } catch (error) {
+      if (error.message.includes('Authorization token or API key not found')) {
+        console.log('Retrying updateProfile with refreshed API key...');
+        const newApiKeyData = await createApiKey(authState.token);
+        saveUserData({ ...authState, apiKey: newApiKeyData.data.key });
+        const headers = {
+          ...options.headers,
+          Authorization: `Bearer ${authState.token}`,
+          'X-Noroff-API-Key': newApiKeyData.data.key,
+        };
+        return await fetcher(url, { ...options, headers });
+      }
       handleError(error);
     }
   }

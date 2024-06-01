@@ -1,9 +1,10 @@
-async function fetcher(url: string, options?: RequestInit) {
-  const res = await fetch(url, options);
-  if (!res.ok) {
-    throw new Error(`An error occurred: ${res.statusText}`);
-  }
-  return res.json();
-}
+export default async function fetcher(url: string, options = {}) {
+  const response = await fetch(url, options);
+  const data = await response.json();
 
-export default fetcher;
+  if (!response.ok) {
+    throw new Error(data.message || 'An error occurred.');
+  }
+
+  return data;
+}

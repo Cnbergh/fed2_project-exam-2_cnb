@@ -8,7 +8,7 @@ import { useApi } from '../../api/api';
 
 const SignUpModal = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { registerUser } = useApi();
+  const { registerUser, loginUser } = useApi();
 
   const {
     register,
@@ -38,6 +38,14 @@ const SignUpModal = ({ isOpen, onClose }) => {
         venueManager: data.venueManager,
       });
       toast.success('Account created successfully');
+
+      // Log in the user after successful registration
+      const loginResponse = await loginUser({
+        email: data.email,
+        password: data.password,
+      });
+      toast.success('Logged in successfully');
+
       onClose();
     } catch (error) {
       toast.error('Something went wrong');

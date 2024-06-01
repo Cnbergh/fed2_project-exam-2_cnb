@@ -20,7 +20,7 @@ export default NextAuth({
           });
 
           if (user) {
-            return user;
+            return user.data; // Adjusted to return user.data
           } else {
             return null;
           }
@@ -37,7 +37,7 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.name;
         token.accessToken = user.accessToken;
       }
       return token;

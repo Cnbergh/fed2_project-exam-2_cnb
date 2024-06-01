@@ -4,17 +4,17 @@ import { HiHome, HiUser, HiEnvelope } from "react-icons/hi2";
 // nav data
 export const navData = [
   {
-    name: "home",
+    name: "Home",
     path: "/",
     icon: <HiHome />,
   },
   {
-    name: "profile",
-    path: "/profile",
+    name: "Venues",
+    path: "/venues",
     icon: <HiUser />,
   },
   {
-    name: "contact",
+    name: "Contact",
     path: "/contact",
     icon: <HiEnvelope />,
   },
