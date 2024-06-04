@@ -21,7 +21,7 @@ export function useApi() {
       );
       try {
         const apiKeyData = await createApiKey(authState.token);
-        saveUserData({ ...authState, apiKey: apiKeyData.data.key });
+        saveUserData({ apiKey: apiKeyData.data.key });
         // Retry the original request
         const headers = {
           ...options.headers,
@@ -50,7 +50,14 @@ export function useApi() {
         error.message.includes('Authorization token or API key not found')
       ) {
         console.log('Retrying with new API key...');
-        return await fetchWithAuth(url, options, false);
+        const apiKeyData = await createApiKey(authState.token);
+        saveUserData({ apiKey: apiKeyData.data.key });
+        const headers = {
+          ...options.headers,
+          Authorization: `Bearer ${authState.token}`,
+          'X-Noroff-API-Key': apiKeyData.data.key,
+        };
+        return await fetcher(url, { ...options, headers });
       } else {
         throw error;
       }
@@ -101,7 +108,7 @@ export function useApi() {
 
   function saveApiKey(apiKey) {
     console.log('Saving API Key:', apiKey);
-    saveUserData({ ...authState, apiKey });
+    saveUserData({ apiKey });
     localStorage.setItem('authState', JSON.stringify({ ...authState, apiKey }));
   }
 
@@ -116,9 +123,19 @@ export function useApi() {
     try {
       const data = await fetcher(url, options);
       console.log('User Logged In:', data);
-      saveUserData({ ...data.data, apiKey: null });
       const apiKeyData = await createApiKey(data.data.accessToken);
-      saveUserData({ ...data.data, apiKey: apiKeyData.data.key });
+      const userData = {
+        token: data.data.accessToken,
+        user: {
+          name: data.data.name,
+          email: data.data.email,
+          avatar: data.data.avatar,
+        },
+        apiKey: apiKeyData.data.key,
+      };
+
+      console.log('User Data to be saved:', userData);
+      saveUserData(userData);
       return data;
     } catch (error) {
       handleError(error);
@@ -132,25 +149,18 @@ export function useApi() {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${authState.token}`,
+        'X-Noroff-API-Key': authState.apiKey,
       },
       body: JSON.stringify(profileData),
     };
 
+    console.log('Updating profile with data:', profileData);
+
     try {
-      const response = await fetchWithAuth(url, options);
+      const response = await fetcher(url, options);
       return response;
     } catch (error) {
-      if (error.message.includes('Authorization token or API key not found')) {
-        console.log('Retrying updateProfile with refreshed API key...');
-        const newApiKeyData = await createApiKey(authState.token);
-        saveUserData({ ...authState, apiKey: newApiKeyData.data.key });
-        const headers = {
-          ...options.headers,
-          Authorization: `Bearer ${authState.token}`,
-          'X-Noroff-API-Key': newApiKeyData.data.key,
-        };
-        return await fetcher(url, { ...options, headers });
-      }
       handleError(error);
     }
   }
@@ -349,9 +359,11 @@ export function useApi() {
 
   async function fetchBookingsByProfile(profileName) {
     const url = `${Profile_URL}/${profileName}/bookings`;
+    console.log('Fetching bookings with URL:', url);
 
     try {
       const response = await fetchWithAuth(url, { method: 'GET' });
+      console.log('FetchBookingsByProfile response:', response);
       return response.data;
     } catch (error) {
       handleError(error);
@@ -391,15 +403,9 @@ export function useApi() {
   };
 }
 
-function handleResponse(response) {
-  if (!response.ok) {
-    console.error(`Error: ${response.statusText} (status: ${response.status})`);
-    throw new Error(response.statusText);
-  }
-  return response.json();
-}
-
 function handleError(error) {
   console.error('API call failed:', error);
-  throw new Error('An error occurred. Please try again later.');
+  throw new Error(
+    error.message || 'An error occurred. Please try again later.'
+  );
 }

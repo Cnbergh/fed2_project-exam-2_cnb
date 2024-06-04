@@ -10,22 +10,11 @@ const AvatarImage = () => {
 
   useEffect(() => {
     console.log('Auth state in AvatarImage:', authState);
-    const storedAvatarUrl = localStorage.getItem('avatarUrl');
-    const storedAvatarAlt = localStorage.getItem('avatarAlt');
-    
-    if (storedAvatarUrl) {
-      setAvatarUrl(storedAvatarUrl);
-    } else if (authState?.user?.avatar?.url) {
+    if (authState?.user?.avatar?.url) {
       setAvatarUrl(authState.user.avatar.url);
+      setAvatarAlt(authState.user.avatar.alt || 'Profile picture');
     } else {
       setAvatarUrl('/images/placeholder.jpg');
-    }
-
-    if (storedAvatarAlt) {
-      setAvatarAlt(storedAvatarAlt);
-    } else if (authState?.user?.avatar?.alt) {
-      setAvatarAlt(authState.user.avatar.alt);
-    } else {
       setAvatarAlt('Profile picture');
     }
   }, [authState]);

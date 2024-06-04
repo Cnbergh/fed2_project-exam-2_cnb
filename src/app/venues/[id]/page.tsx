@@ -7,6 +7,7 @@ import Container from '@/components/container';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import Calendar from '@/components/calender';
 import { useForm } from 'react-hook-form';
+import Modal, { ModalOverlay, ModalContent, ModalClose } from '@/components/modals/modal';
 
 const VenuePageId = () => {
   const { id } = useParams();
@@ -20,6 +21,8 @@ const VenuePageId = () => {
     endDate: new Date(),
     key: 'selection'
   });
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState(null);
   const { register, handleSubmit, formState: { errors } } = useForm();
   const router = useRouter();
 
@@ -64,16 +67,27 @@ const VenuePageId = () => {
 
   const onSubmit = async (data) => {
     try {
-      await createBooking({
+      const bookingData = {
         ...data,
+        guests: Number(data.guests),
         venueId: id,
         dateFrom: dateRange.startDate.toISOString(),
         dateTo: dateRange.endDate.toISOString()
+      };
+      await createBooking(bookingData);
+      setBookingDetails({
+        venueName: venue.name,
+        dateFrom: dateRange.startDate.toISOString(),
+        dateTo: dateRange.endDate.toISOString()
       });
-      router.push('/my-bookings');
+      setShowConfirmation(true);
     } catch (error) {
       console.error('Failed to create booking:', error);
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowConfirmation(false);
   };
 
   if (loading) {
@@ -120,12 +134,40 @@ const VenuePageId = () => {
             onChange={handleSelect}
           />
           <form onSubmit={handleSubmit(onSubmit)}>
+            <input
+              type="number"
+              placeholder="Number of Guests"
+              min={1}
+              max={venue.maxGuests}
+              {...register('guests', { required: 'Number of guests is required', valueAsNumber: true })}
+              className="p-2 border rounded"
+            />
+            {errors.guests && <p className="text-red-500">{errors.guests.message}</p>}
             <button type="submit" className="mt-4 bg-teal-500 text-white font-bold py-2 px-4 rounded">
               Book Now
             </button>
           </form>
         </div>
       </Container>
+      {showConfirmation && (
+        <Modal open={showConfirmation} onOpenChange={handleCloseModal}>
+          <ModalOverlay>
+            <ModalContent title="Booking Confirmation">
+              <div className="flex flex-col space-y-4">
+                <p>Thank you for booking {bookingDetails.venueName}!</p>
+                <p>Your booking is from {new Date(bookingDetails.dateFrom).toLocaleDateString()} to {new Date(bookingDetails.dateTo).toLocaleDateString()}.</p>
+                <button
+                  onClick={handleCloseModal}
+                  className="bg-teal-500 text-white font-bold py-2 px-4 rounded"
+                >
+                  Close
+                </button>
+              </div>
+              <ModalClose onClick={handleCloseModal}>Cancel</ModalClose>
+            </ModalContent>
+          </ModalOverlay>
+        </Modal>
+      )}
     </main>
   );
 };

@@ -40,7 +40,7 @@ const SignUpModal = ({ isOpen, onClose }) => {
       toast.success('Account created successfully');
 
       // Log in the user after successful registration
-      const loginResponse = await loginUser({
+      await loginUser({
         email: data.email,
         password: data.password,
       });
@@ -48,7 +48,17 @@ const SignUpModal = ({ isOpen, onClose }) => {
 
       onClose();
     } catch (error) {
-      toast.error('Something went wrong');
+      // Try to parse the error message from the response
+      let errorMessage = 'Something went wrong';
+      try {
+        const errorData = JSON.parse(error.message);
+        if (errorData.errors && errorData.errors.length > 0) {
+          errorMessage = errorData.errors[0].message;
+        }
+      } catch (e) {
+        console.error('Failed to parse error message:', e);
+      }
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
