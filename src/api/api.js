@@ -177,6 +177,16 @@ export function useApi() {
     }
   }
 
+  async function fetchBookingsByVenue(venueId) {
+    const url = `${Venues_URL}/${venueId}/bookings`;
+    try {
+      const response = await fetchWithAuth(url, { method: 'GET' });
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async function fetchVenueById(venueId) {
     const url = `${Venues_URL}/${venueId}?_bookings=true`;
 
@@ -389,6 +399,7 @@ export function useApi() {
     fetchProfileById,
     fetchBookingsByProfile,
     fetchVenuesByProfile,
+    fetchBookingsByVenue,
     fetchVenues,
     fetchVenueById,
     createVenue,

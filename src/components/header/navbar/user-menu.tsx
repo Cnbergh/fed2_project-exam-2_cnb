@@ -11,6 +11,7 @@ import MyBookingsModal from '@/components/modals/my-bookings_modal';
 import BecomeHostModal from '@/components/modals/become-host_modal';
 import { useAuth } from '@/components/providers/auth_context';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 const UserMenu = () => {
   const { authState, logoutUser } = useAuth();
@@ -19,7 +20,7 @@ const UserMenu = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isUpdateAvatarOpen, setIsUpdateAvatarOpen] = useState(false);
   const [isBookingsOpen, setIsBookingsOpen] = useState(false);
-  const [isBecomeHostOpen, setIsBecomeHostOpen] = useState(false); // State for the new modal
+  const [isBecomeHostOpen, setIsBecomeHostOpen] = useState(false);
 
   const toggleOpen = useCallback(() => setIsOpen((isOpen) => !isOpen), []);
 
@@ -29,6 +30,18 @@ const UserMenu = () => {
     router.push(path);
     setIsOpen(false);
   }, [router]);
+
+  const handleManageVenues = () => {
+    if (!authState.user) {
+      toast('You need to log in to manage venues.', { icon: 'ℹ️' });
+      setIsLoginOpen(true);
+    } else if (!authState.user.venueManager) {
+      toast('You need to become a host to manage venues.', { icon: 'ℹ️' });
+      setIsBecomeHostOpen(true);
+    } else {
+      handleNavigation('/dashboard');
+    }
+  };
 
   useEffect(() => {
     if (!authState.user) {
@@ -70,7 +83,7 @@ const UserMenu = () => {
               <>
                 <MenuItem onClick={() => handleNavigation("/venues")} label="View Venues" />
                 <MenuItem onClick={() => setIsBookingsOpen(true)} label="My Bookings" />
-                <MenuItem onClick={() => handleNavigation("/bookings/manage")} label="Manage Venues" />
+                <MenuItem onClick={handleManageVenues} label="Manage Venues" />
                 <MenuItem onClick={() => setIsUpdateAvatarOpen(true)} label="Update Avatar" />
                 <hr />
                 <MenuItem onClick={logoutUser} label="Logout" />
@@ -88,7 +101,7 @@ const UserMenu = () => {
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
       <UpdateAvatarModal isOpen={isUpdateAvatarOpen} onClose={() => setIsUpdateAvatarOpen(false)} />
       <MyBookingsModal isOpen={isBookingsOpen} onClose={() => setIsBookingsOpen(false)} />
-      <BecomeHostModal isOpen={isBecomeHostOpen} onClose={() => setIsBecomeHostOpen(false)} /> {/* New modal */}
+      <BecomeHostModal isOpen={isBecomeHostOpen} onClose={() => setIsBecomeHostOpen(false)} />
     </div>
   );
 };
