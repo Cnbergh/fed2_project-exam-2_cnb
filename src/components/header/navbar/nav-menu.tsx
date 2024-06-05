@@ -1,5 +1,5 @@
 'use client';
-import { HiHome, HiUser, HiEnvelope } from "react-icons/hi2";
+import { HiHome, HiMiniHomeModern , HiEnvelope } from "react-icons/hi2";
 
 // nav data
 export const navData = [
@@ -11,7 +11,7 @@ export const navData = [
   {
     name: "Venues",
     path: "/venues",
-    icon: <HiUser />,
+    icon: <HiMiniHomeModern  />,
   },
   {
     name: "Contact",
@@ -34,6 +34,7 @@ const NavMenu = () => {
   const router = useRouter();
   const pathname = router.pathname;
   return (
+    <div className="pt-2">
     <nav className="bg-white border-[1px] w-full md:w-auto py-2 rounded-full shadow-sm hover:shadow-ms transition cursor-pointer">
       {/* inner */}
       <div
@@ -52,12 +53,13 @@ const NavMenu = () => {
               <div className="hidden lg:block">{link.name}</div>
 
               {/* icon */}
-              <div>{link.icon}</div>
+              <div className="pl-1 lg:pl-2">{link.icon}</div>
             </Link>
           );
         })}
       </div>
     </nav>
+    </div>
   );
 };
 

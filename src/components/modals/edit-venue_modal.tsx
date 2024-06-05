@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal, { ModalOverlay, ModalContent, ModalClose } from './modal';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -27,21 +27,44 @@ interface VenueFormInputs {
   lng: string; // Change to string
 }
 
-const CreateVenueModal = ({ isOpen, onClose, onVenueCreated }) => {
-  const { createVenue } = useApi();
-  const { register, handleSubmit, reset } = useForm<VenueFormInputs>();
+const EditVenueModal = ({ isOpen, venue, onClose, onVenueUpdated }) => {
+  const { updateVenue } = useApi();
+  const { register, handleSubmit, reset, setValue } = useForm<VenueFormInputs>();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (venue) {
+      setValue('name', venue.name);
+      setValue('description', venue.description);
+      setValue('mediaUrl', venue.media[0]?.url || '');
+      setValue('mediaAlt', venue.media[0]?.alt || '');
+      setValue('price', venue.price.toString());
+      setValue('maxGuests', venue.maxGuests.toString());
+      setValue('rating', venue.rating.toString());
+      setValue('wifi', venue.meta.wifi);
+      setValue('parking', venue.meta.parking);
+      setValue('breakfast', venue.meta.breakfast);
+      setValue('pets', venue.meta.pets);
+      setValue('address', venue.location.address || '');
+      setValue('city', venue.location.city || '');
+      setValue('zip', venue.location.zip || '');
+      setValue('country', venue.location.country || '');
+      setValue('continent', venue.location.continent || '');
+      setValue('lat', venue.location.lat.toString());
+      setValue('lng', venue.location.lng.toString());
+    }
+  }, [venue, setValue]);
 
   const onSubmit: SubmitHandler<VenueFormInputs> = async (data) => {
     setLoading(true);
     try {
-      const venueData = {
+      const updatedVenue = {
         name: data.name,
         description: data.description,
         media: data.mediaUrl ? [{ url: data.mediaUrl, alt: data.mediaAlt }] : [],
-        price: parseFloat(data.price), // Convert to number
-        maxGuests: parseInt(data.maxGuests, 10), // Convert to number
-        rating: parseFloat(data.rating) || 0, // Convert to number, default to 0
+        price: parseFloat(data.price),
+        maxGuests: parseInt(data.maxGuests, 10),
+        rating: parseFloat(data.rating) || 0,
         meta: {
           wifi: data.wifi,
           parking: data.parking,
@@ -54,18 +77,18 @@ const CreateVenueModal = ({ isOpen, onClose, onVenueCreated }) => {
           zip: data.zip || null,
           country: data.country || null,
           continent: data.continent || null,
-          lat: parseFloat(data.lat) || 0, // Convert to number, default to 0
-          lng: parseFloat(data.lng) || 0, // Convert to number, default to 0
+          lat: parseFloat(data.lat) || 0,
+          lng: parseFloat(data.lng) || 0,
         },
       };
 
-      await createVenue(venueData);
-      toast.success('Venue created successfully!');
+      await updateVenue(venue.id, updatedVenue); // Pass venue ID and updated data separately
+      toast.success('Venue updated successfully!');
       reset();
       onClose();
-      onVenueCreated();
+      onVenueUpdated();
     } catch (error) {
-      toast.error('Failed to create venue. Please try again.');
+      toast.error('Failed to update venue. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -74,7 +97,7 @@ const CreateVenueModal = ({ isOpen, onClose, onVenueCreated }) => {
   return (
     <Modal open={isOpen} onOpenChange={onClose}>
       <ModalOverlay>
-        <ModalContent title="Create Venue">
+        <ModalContent title="Edit Venue">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col space-y-4">
               <input {...register('name', { required: true })} placeholder="Venue Name" />
@@ -109,7 +132,7 @@ const CreateVenueModal = ({ isOpen, onClose, onVenueCreated }) => {
               <input type="number" {...register('lng')} placeholder="Longitude (optional)" />
               <div className="mt-4">
                 <button type="submit" disabled={loading}>
-                  {loading ? 'Creating...' : 'Create Venue'}
+                  {loading ? 'Updating...' : 'Update Venue'}
                 </button>
               </div>
             </div>
@@ -121,4 +144,4 @@ const CreateVenueModal = ({ isOpen, onClose, onVenueCreated }) => {
   );
 };
 
-export default CreateVenueModal;
+export default EditVenueModal;

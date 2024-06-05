@@ -2,11 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  overflow-x: hidden;
+  margin: 0;
+  height: 100%;
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 81, 131, 141;
-  --background-end-rgb: 152, 172, 176;
+  --background-end-rgb: 245, 247, 248;
 }
 
 @media (prefers-color-scheme: dark) {

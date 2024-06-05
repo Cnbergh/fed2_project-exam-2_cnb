@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useApi } from '@/api/api';
 import VenueList from './venue-list';
 import BookingList from './booking-list';
@@ -8,14 +8,16 @@ import { useAuth } from '@/components/providers/auth_context';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import CreateVenueModal from '@/components/modals/create-venue_modal';
+import EditVenueModal from '@/components/modals/edit-venue_modal';
 
 const VenueManagerDashboard = () => {
   const { authState } = useAuth();
-  const { fetchVenuesByProfile, fetchBookingsByVenue } = useApi();
+  const { fetchVenuesByProfile, fetchBookingsByVenue, deleteVenue } = useApi();
   const [venues, setVenues] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [selectedVenueId, setSelectedVenueId] = useState(null);
   const [isCreateVenueOpen, setIsCreateVenueOpen] = useState(false);
+  const [isEditVenueOpen, setIsEditVenueOpen] = useState(false);
   const router = useRouter();
 
   const fetchVenues = useCallback(async () => {
@@ -26,6 +28,7 @@ const VenueManagerDashboard = () => {
     }
 
     try {
+      console.log('Fetching venues for user:', authState.user.name);
       const response = await fetchVenuesByProfile(authState.user.name);
       setVenues(response);
     } catch (error) {
@@ -37,7 +40,7 @@ const VenueManagerDashboard = () => {
     if (authState.user?.name) {
       fetchVenues();
     }
-  }, [fetchVenues, authState.user?.name]);
+  }, [authState.user?.name]);
 
   const handleVenueClick = useCallback(async (venueId) => {
     setSelectedVenueId(venueId);
@@ -53,6 +56,25 @@ const VenueManagerDashboard = () => {
     setIsCreateVenueOpen(true);
   };
 
+  const handleEditVenueClick = (venue) => {
+    setSelectedVenueId(venue.id);
+    setIsEditVenueOpen(true);
+  };
+
+  const handleDeleteVenueClick = async (venueId) => {
+    try {
+      await deleteVenue(venueId);
+      toast.success('Venue deleted successfully!');
+      fetchVenues(); // Refresh venues after deletion
+    } catch (error) {
+      toast.error(error.message || 'Failed to delete venue.');
+    }
+  };
+
+  const handleVenueCreatedOrUpdated = () => {
+    fetchVenues();
+  };
+
   return (
     <div className="venue-manager-dashboard">
       <h1 className="text-2xl font-bold mb-4">Venue Manager Dashboard</h1>
@@ -64,7 +86,12 @@ const VenueManagerDashboard = () => {
       </button>
       <div className="mt-4">
         <h2 className="text-xl font-semibold">My Venues</h2>
-        <VenueList venues={venues} onVenueClick={handleVenueClick} />
+        <VenueList
+          venues={venues}
+          onVenueClick={handleVenueClick}
+          onEditVenue={handleEditVenueClick}
+          onDeleteVenue={handleDeleteVenueClick}
+        />
       </div>
       {selectedVenueId && (
         <div className="mt-4">
@@ -75,7 +102,16 @@ const VenueManagerDashboard = () => {
       <CreateVenueModal
         isOpen={isCreateVenueOpen}
         onClose={() => setIsCreateVenueOpen(false)}
+        onVenueCreated={handleVenueCreatedOrUpdated}
       />
+      {selectedVenueId && (
+        <EditVenueModal
+          isOpen={isEditVenueOpen}
+          onClose={() => setIsEditVenueOpen(false)}
+          venue={venues.find((venue) => venue.id === selectedVenueId)}
+          onVenueUpdated={handleVenueCreatedOrUpdated}
+        />
+      )}
     </div>
   );
 };

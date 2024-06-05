@@ -12,7 +12,7 @@ import { useAuth } from '../components/providers/auth_context';
 export function useApi() {
   const { authState, saveUserData, logoutUser } = useAuth();
 
-  async function fetchWithAuth(url, options = {}, retry = true) {
+  async function fetchWithAuth(url, options = {}, retry = 0) {
     console.log('Auth State before API call:', authState);
 
     if (!authState.token || !authState.apiKey) {
@@ -45,19 +45,11 @@ export function useApi() {
     try {
       return await fetcher(url, { ...options, headers });
     } catch (error) {
-      if (
-        retry &&
-        error.message.includes('Authorization token or API key not found')
-      ) {
-        console.log('Retrying with new API key...');
-        const apiKeyData = await createApiKey(authState.token);
-        saveUserData({ apiKey: apiKeyData.data.key });
-        const headers = {
-          ...options.headers,
-          Authorization: `Bearer ${authState.token}`,
-          'X-Noroff-API-Key': apiKeyData.data.key,
-        };
-        return await fetcher(url, { ...options, headers });
+      if (retry < 3 && error.message.includes('429')) {
+        const delay = Math.pow(2, retry) * 1000; // Exponential backoff
+        console.log(`Retrying in ${delay}ms...`);
+        await new Promise((res) => setTimeout(res, delay));
+        return fetchWithAuth(url, options, retry + 1);
       } else {
         throw error;
       }
@@ -384,7 +376,7 @@ export function useApi() {
     const url = `${Profile_URL}/${profileName}/venues`;
 
     try {
-      const response = await fetchWithAuth(url, { method: 'GET' });
+      const response = await fetchWithAuth(url, { method: 'GET' }, true);
       return response.data;
     } catch (error) {
       handleError(error);
