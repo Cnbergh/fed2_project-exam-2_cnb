@@ -15,19 +15,21 @@ const VenuesPage = () => {
   useEffect(() => {
     const getVenues = async () => {
       try {
-        const location = searchParams.get('location');
-        const dateFrom = searchParams.get('dateFrom');
-        const dateTo = searchParams.get('dateTo');
-        const guests = searchParams.get('guests');
-        let venuesData;
+        if (searchParams) {
+          const location = searchParams.get('location');
+          const dateFrom = searchParams.get('dateFrom');
+          const dateTo = searchParams.get('dateTo');
+          const guests = searchParams.get('guests');
+          let venuesData;
 
-        if (location || dateFrom || dateTo || guests) {
-          venuesData = await searchVenues({ location, dateFrom, dateTo, guests });
-        } else {
-          venuesData = await fetchVenues();
+          if (location || dateFrom || dateTo || guests) {
+            venuesData = await searchVenues({ location, dateFrom, dateTo, guests });
+          } else {
+            venuesData = await fetchVenues();
+          }
+
+          setVenues(venuesData);
         }
-
-        setVenues(venuesData);
       } catch (error) {
         console.error('Failed to fetch venues:', error);
       }
