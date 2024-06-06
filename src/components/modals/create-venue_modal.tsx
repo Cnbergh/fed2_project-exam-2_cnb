@@ -27,7 +27,13 @@ interface VenueFormInputs {
   lng: string; // Change to string
 }
 
-const CreateVenueModal = ({ isOpen, onClose, onVenueCreated }) => {
+interface CreateVenueModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onVenueCreated: () => void;
+}
+
+const CreateVenueModal: React.FC<CreateVenueModalProps> = ({ isOpen, onClose, onVenueCreated }) => {
   const { createVenue } = useApi();
   const { register, handleSubmit, reset } = useForm<VenueFormInputs>();
   const [loading, setLoading] = useState(false);
