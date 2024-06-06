@@ -2,38 +2,55 @@
 
 import React from 'react';
 
-const VenueList = ({ venues, onVenueClick, onEditVenue, onDeleteVenue }) => {
+interface Venue {
+  id: string;
+  name: string;
+  description: string;
+  media: { url: string; alt: string }[];
+  price: number;
+  maxGuests: number;
+  rating: number;
+  meta: {
+    wifi: boolean;
+    parking: boolean;
+    breakfast: boolean;
+    pets: boolean;
+  };
+  location: {
+    address: string | null;
+    city: string | null;
+    zip: string | null;
+    country: string | null;
+    continent: string | null;
+    lat: number;
+    lng: number;
+  };
+}
+
+interface VenueListProps {
+  venues: Venue[];
+  onVenueClick: (venueId: string) => void;
+  onEditVenue: (venue: Venue) => void;
+  onDeleteVenue: (venueId: string) => void;
+}
+
+const VenueList: React.FC<VenueListProps> = ({ venues, onVenueClick, onEditVenue, onDeleteVenue }) => {
   return (
     <div className="mt-4">
       {venues.length === 0 ? (
         <p>No venues found.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <ul className="space-y-2">
           {venues.map((venue) => (
-            <div key={venue.id} className="p-4 border rounded">
-              <h2 className="text-xl font-bold">{venue.name}</h2>
+            <li key={venue.id} className="border p-2 rounded">
+              <p className="font-bold">{venue.name}</p>
               <p>{venue.description}</p>
-              <button
-                className=" text-black px-2 py-1 rounded hover:bg-gray-200 transition mt-2"
-                onClick={() => onVenueClick(venue.id)}
-              >
-                View Bookings
-              </button>
-              <button
-                className="text-black px-2 py-1 rounded hover:bg-gray-200 transition mt-2"
-                onClick={() => onEditVenue(venue)}
-              >
-                Edit
-              </button>
-              <button
-                className="text-black px-2 py-1 rounded hover:bg-gray-200 transition mt-2"
-                onClick={() => onDeleteVenue(venue.id)}
-              >
-                Delete
-              </button>
-            </div>
+              <button onClick={() => onVenueClick(venue.id)}>View</button>
+              <button onClick={() => onEditVenue(venue)}>Edit</button>
+              <button onClick={() => onDeleteVenue(venue.id)}>Delete</button>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
