@@ -27,13 +27,15 @@ const BecomeHostModal: React.FC<BecomeHostModalProps> = ({ isOpen, onClose }) =>
         onClose();
         return;
       }
-      
+
       const profileData = { venueManager: true };
-      const response = await updateProfile(authState.user?.name as string, profileData);
+      const response: any = await updateProfile(authState.user?.name as string, profileData);
       console.log('Profile update response:', response);
-      
+
       const updatedUser: User = {
-        ...authState.user,
+        name: authState.user?.name || '',
+        email: authState.user?.email || '',
+        avatar: authState.user?.avatar,
         venueManager: true,
       };
       saveUserData({ ...authState, user: updatedUser });
@@ -41,7 +43,7 @@ const BecomeHostModal: React.FC<BecomeHostModalProps> = ({ isOpen, onClose }) =>
       onClose();
     } catch (error) {
       console.error('Failed to become host:', error);
-      const errorMessage = error.message || (error.errors && error.errors[0].message) || 'Failed to update profile.';
+      const errorMessage = (error as Error).message || (error as any).errors?.[0]?.message || 'Failed to update profile.';
       toast.error(errorMessage);
     } finally {
       setLoading(false);
