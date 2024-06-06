@@ -7,7 +7,12 @@ import { useApi } from '@/api/api';
 import { useAuth } from '@/components/providers/auth_context';
 import toast from 'react-hot-toast';
 
-const BecomeHostModal = ({ isOpen, onClose }) => {
+interface BecomeHostModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const BecomeHostModal: React.FC<BecomeHostModalProps> = ({ isOpen, onClose }) => {
   const { authState, saveUserData } = useAuth();
   const { updateProfile } = useApi();
   const [loading, setLoading] = useState(false);
@@ -15,7 +20,7 @@ const BecomeHostModal = ({ isOpen, onClose }) => {
   const handleBecomeHost = async () => {
     setLoading(true);
     try {
-      if (authState.user.venueManager) {
+      if (authState.user?.venueManager) {
         toast('You are already a venue manager.', { icon: 'ℹ️' });
         setLoading(false);
         onClose();
@@ -23,14 +28,13 @@ const BecomeHostModal = ({ isOpen, onClose }) => {
       }
       
       const profileData = { venueManager: true };
-      const response = await updateProfile(authState.user.name, profileData);
+      const response = await updateProfile(authState.user?.name, profileData);
       console.log('Profile update response:', response);
       saveUserData({ ...authState, user: { ...authState.user, venueManager: true } });
       toast.success('You are now a venue manager!');
       onClose();
     } catch (error) {
       console.error('Failed to become host:', error);
-      // Extract and display the message from the API error response
       const errorMessage = error.message || (error.errors && error.errors[0].message) || 'Failed to update profile.';
       toast.error(errorMessage);
     } finally {
