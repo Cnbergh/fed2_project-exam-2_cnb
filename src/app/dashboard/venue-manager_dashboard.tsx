@@ -11,12 +11,12 @@ import CreateVenueModal from '@/components/modals/create-venue_modal';
 import EditVenueModal from '@/components/modals/edit-venue_modal';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 
-const VenueManagerDashboard: React.FC = () => {
+const VenueManagerDashboard: React.FC  = () => {
   const { authState } = useAuth();
   const { fetchVenuesByProfile, fetchBookingsByVenue, deleteVenue } = useApi();
-  const [venues, setVenues] = useState([]);
-  const [bookings, setBookings] = useState([]);
-  const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
+  const [venues, setVenues] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [selectedVenueId, setSelectedVenueId] =  useState<string | null>(null);
   const [isCreateVenueOpen, setIsCreateVenueOpen] = useState(false);
   const [isEditVenueOpen, setIsEditVenueOpen] = useState(false);
   const router = useRouter();
@@ -41,7 +41,7 @@ const VenueManagerDashboard: React.FC = () => {
     if (authState.user?.name) {
       fetchVenues();
     }
-  }, [authState.user?.name, fetchVenues]);
+  }, [authState.user?.name]);
 
   const handleVenueClick = useCallback(async (venueId: string) => {
     setSelectedVenueId(venueId);
