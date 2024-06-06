@@ -6,7 +6,7 @@ import { useApi } from '@/api/api';
 import Container from '@/components/container';
 import * as AspectRatio from '@radix-ui/react-aspect-ratio';
 import Calendar from '@/components/calender';
-import { useForm } from 'react-hook-form';
+import { useForm, FieldError } from 'react-hook-form';
 import Modal, {
   ModalOverlay,
   ModalContent,
@@ -156,7 +156,7 @@ const VenuePageId = () => {
                         className="p-2 border rounded w-1/3 "
                       />
                       {errors.guests && (
-                        <p className="text-red-500">{errors.guests.message}</p>
+                        <p className="text-red-500">{(errors.guests as FieldError).message}</p>
                       )}
                       <button
                         type="submit"
