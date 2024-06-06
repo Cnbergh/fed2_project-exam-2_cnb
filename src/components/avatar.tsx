@@ -3,8 +3,24 @@ import React, { useEffect, useState } from 'react';
 import * as Avatar from '@radix-ui/react-avatar';
 import { useAuth } from './providers/auth_context';
 
+// Define the type for Avatar
+interface AvatarType {
+  url: string;
+  alt: string;
+}
+
+// Define the type for User
+interface UserType {
+  avatar?: AvatarType;
+}
+
+// Define the type for AuthState
+interface AuthStateType {
+  user?: UserType;
+}
+
 const AvatarImage = () => {
-  const { authState } = useAuth();
+  const { authState } = useAuth() as { authState: AuthStateType };
   const [avatarUrl, setAvatarUrl] = useState('/images/placeholder.jpg');
   const [avatarAlt, setAvatarAlt] = useState('Profile picture');
 
