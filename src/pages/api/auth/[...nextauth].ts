@@ -1,7 +1,13 @@
 import NextAuth from 'next-auth';
+import { User as NextAuthUser } from 'next-auth';
+import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import fetcher from '../../../lib/fetcher';
 import { Login_URL } from '../../../api/constants';
+
+interface ExtendedUser extends NextAuthUser {
+  accessToken?: string; // Make accessToken optional
+}
 
 export default NextAuth({
   providers: [
@@ -35,16 +41,22 @@ export default NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: ExtendedUser }) {
       if (user) {
-        token.id = user.name;
-        token.accessToken = user.accessToken;
+        token.id = user.id;
+        if (user.accessToken) {
+          token.accessToken = user.accessToken;
+        }
       }
       return token;
     },
-    async session({ session, token }) {
-      session.user.id = token.id;
-      session.user.accessToken = token.accessToken;
+    async session({ session, token }: { session: any; token: JWT }) {
+      if (session.user) {
+        session.user.id = token.id;
+        if (token.accessToken) {
+          session.user.accessToken = token.accessToken;
+        }
+      }
       return session;
     },
   },
