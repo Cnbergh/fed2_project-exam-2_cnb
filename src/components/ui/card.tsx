@@ -2,9 +2,44 @@
 
 import { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import { format } from 'date-fns'; // Import format from date-fns
 import Button from './button-multi-purpose';
 
-const Card = ({
+interface Media {
+  url: string;
+  alt: string;
+  fill?: boolean;
+}
+
+interface Venue {
+  id: string;
+  name: string;
+  price: number;
+  media: Media[];
+  location: {
+    city: string;
+    country: string;
+  };
+  category: string;
+}
+
+interface Reservation {
+  id: string;
+  startDate: string;
+  endDate: string;
+  totalPrice: number;
+}
+
+interface CardProps {
+  venue: Venue;
+  reservation?: Reservation;
+  onAction?: (id: string) => void;
+  disabled?: boolean;
+  actionLabel?: string;
+  actionId?: string;
+}
+
+const Card: React.FC<CardProps> = ({
   venue,
   reservation,
   onAction,
@@ -15,7 +50,7 @@ const Card = ({
   const router = useRouter();
 
   const handleAction = useCallback(
-    (e) => {
+    (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       if (disabled) return;
       onAction?.(actionId);
@@ -42,7 +77,6 @@ const Card = ({
       <div className="flex flex-col gap-2 w-full rounded-3xl p-1 bg-white">
         <div className="aspect-square w-full relative overflow-hidden rounded-3xl">
           <img
-            fill={venue.media[0]?.fill ? venue.media[0].fill.toString() : 'false'}
             className="object-cover h-full w-full group-hover:scale-110 transition"
             src={venue.media[0]?.url || '/images/placeholder.jpg'}
             alt={venue.media[0]?.alt || 'Venue image'}
