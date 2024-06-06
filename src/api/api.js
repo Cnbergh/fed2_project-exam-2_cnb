@@ -13,8 +13,6 @@ export function useApi() {
   const { authState, saveUserData, logoutUser } = useAuth();
 
   async function fetchWithAuth(url, options = {}, retry = 0) {
-    console.log('Auth State before API call:', authState);
-
     if (!authState.token || !authState.apiKey) {
       console.log(
         'Authorization token or API key not found. Attempting to create a new API key...'

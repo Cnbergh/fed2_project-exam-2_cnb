@@ -1,8 +1,17 @@
 'use client';
 
 import React from 'react';
+interface Booking {
+  id: string;
+  dateFrom: string;
+  dateTo: string;
+  guests: number;
+}
+interface BookingListProps {
+  bookings: Booking[];
+}
 
-const BookingList = ({ bookings }) => {
+const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
   return (
     <div className="mt-4">
       <h2 className="text-xl font-bold mb-2">Bookings for Selected Venue</h2>
