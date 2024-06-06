@@ -176,8 +176,8 @@ const VenuePageId = () => {
                       <p>Thank you for booking {bookingDetails?.venueName}!</p>
                       <p>
                         Your booking is from{' '}
-                        {new Date(bookingDetails?.dateFrom).toLocaleDateString()} to{' '}
-                        {new Date(bookingDetails?.dateTo).toLocaleDateString()}.
+                        {bookingDetails?.dateFrom ? new Date(bookingDetails.dateFrom).toLocaleDateString() : ''} to{' '}
+                        {bookingDetails?.dateTo ? new Date(bookingDetails.dateTo).toLocaleDateString() : ''}.
                       </p>
                       <button
                         onClick={handleCloseModal}
