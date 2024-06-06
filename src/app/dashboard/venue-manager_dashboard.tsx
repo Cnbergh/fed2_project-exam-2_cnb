@@ -11,12 +11,12 @@ import CreateVenueModal from '@/components/modals/create-venue_modal';
 import EditVenueModal from '@/components/modals/edit-venue_modal';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 
-const VenueManagerDashboard = () => {
+const VenueManagerDashboard: React.FC = () => {
   const { authState } = useAuth();
   const { fetchVenuesByProfile, fetchBookingsByVenue, deleteVenue } = useApi();
   const [venues, setVenues] = useState([]);
   const [bookings, setBookings] = useState([]);
-  const [selectedVenueId, setSelectedVenueId] = useState(null);
+  const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
   const [isCreateVenueOpen, setIsCreateVenueOpen] = useState(false);
   const [isEditVenueOpen, setIsEditVenueOpen] = useState(false);
   const router = useRouter();
@@ -32,7 +32,7 @@ const VenueManagerDashboard = () => {
       console.log('Fetching venues for user:', authState.user.name);
       const response = await fetchVenuesByProfile(authState.user.name);
       setVenues(response);
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message || 'Failed to fetch venues.');
     }
   }, [authState.user, fetchVenuesByProfile, router]);
@@ -41,14 +41,14 @@ const VenueManagerDashboard = () => {
     if (authState.user?.name) {
       fetchVenues();
     }
-  }, [authState.user?.name]);
+  }, [authState.user?.name, fetchVenues]);
 
-  const handleVenueClick = useCallback(async (venueId) => {
+  const handleVenueClick = useCallback(async (venueId: string) => {
     setSelectedVenueId(venueId);
     try {
       const response = await fetchBookingsByVenue(venueId);
       setBookings(response);
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message || 'Failed to fetch bookings.');
     }
   }, [fetchBookingsByVenue]);
@@ -57,17 +57,17 @@ const VenueManagerDashboard = () => {
     setIsCreateVenueOpen(true);
   };
 
-  const handleEditVenueClick = (venue) => {
+  const handleEditVenueClick = (venue: any) => {
     setSelectedVenueId(venue.id);
     setIsEditVenueOpen(true);
   };
 
-  const handleDeleteVenueClick = async (venueId) => {
+  const handleDeleteVenueClick = async (venueId: string) => {
     try {
       await deleteVenue(venueId);
       toast.success('Venue deleted successfully!');
       fetchVenues(); // Refresh venues after deletion
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message || 'Failed to delete venue.');
     }
   };
