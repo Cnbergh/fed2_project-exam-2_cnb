@@ -8,7 +8,12 @@ import { useApi } from '../../api/api';
 import { useAuth } from '../../components/providers/auth_context';
 import { Cross1Icon } from "@radix-ui/react-icons";
 
-const LoginModal = ({ isOpen, onClose }) => {
+interface LoginModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { loginUser } = useApi();
   const { saveUserData } = useAuth();
@@ -50,14 +55,12 @@ const LoginModal = ({ isOpen, onClose }) => {
             <div className="flex flex-col space-y-4">
               <input
                 id="email"
-                label="Email"
                 disabled={isLoading}
                 {...register('email', { required: true })}
                 placeholder="Email"
               />
               <input
                 id="password"
-                label="Password"
                 type="password"
                 disabled={isLoading}
                 {...register('password', { required: true })}
