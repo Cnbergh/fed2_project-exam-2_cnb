@@ -3,28 +3,40 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import Modal, {
-  ModalOverlay,
-  ModalContent,
-  ModalClose,
-} from './modal';
+import Modal, { ModalOverlay, ModalContent, ModalClose } from './modal';
 import Calendar from '@/components/calender';
-import { RangeKeyDict } from 'react-date-range';
+import { RangeKeyDict, Range } from 'react-date-range';
 import { useApi } from '@/api/api';
 
-const SearchModal = ({ isOpen, onClose }) => {
+interface SearchModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+interface DateRange {
+  startDate: Date;
+  endDate: Date;
+  key: string;
+}
+
+const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const { searchVenues } = useApi();
-  const [location, setLocation] = useState('');
-  const [dateRange, setDateRange] = useState({
+  const [location, setLocation] = useState<string>('');
+  const [dateRange, setDateRange] = useState<DateRange>({
     startDate: new Date(),
     endDate: new Date(),
     key: 'selection',
   });
-  const [guests, setGuests] = useState(1);
+  const [guests, setGuests] = useState<number>(1);
 
   const handleSelect = (ranges: RangeKeyDict) => {
-    setDateRange(ranges.selection);
+    const range = ranges.selection as Range;
+    setDateRange({
+      startDate: range.startDate || new Date(),
+      endDate: range.endDate || new Date(),
+      key: 'selection',
+    });
   };
 
   const handleSubmit = async () => {
