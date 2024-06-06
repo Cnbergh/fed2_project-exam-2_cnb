@@ -14,7 +14,7 @@ interface VenueFormInputs {
   mediaAlt: string;
   price: string;
   maxGuests: string;
-  rating: string; 
+  rating: string;
   wifi: boolean;
   parking: boolean;
   breakfast: boolean;
@@ -28,7 +28,14 @@ interface VenueFormInputs {
   lng: string;
 }
 
-const EditVenueModal = ({ isOpen, venue, onClose, onVenueUpdated }) => {
+interface EditVenueModalProps {
+  isOpen: boolean;
+  venue: any; // Replace 'any' with a specific type if available
+  onClose: () => void;
+  onVenueUpdated: () => void;
+}
+
+const EditVenueModal: React.FC<EditVenueModalProps> = ({ isOpen, venue, onClose, onVenueUpdated }) => {
   const { updateVenue } = useApi();
   const { register, handleSubmit, reset, setValue } = useForm<VenueFormInputs>();
   const [loading, setLoading] = useState(false);
@@ -99,59 +106,59 @@ const EditVenueModal = ({ isOpen, venue, onClose, onVenueUpdated }) => {
     <Modal open={isOpen} onOpenChange={onClose}>
       <ModalOverlay>
         <ModalContent title="Edit Venue">
-        <ScrollArea.Root className="w-full h-[400px] rounded overflow-hidden">
-        <ScrollArea.Viewport className="w-full h-full rounded">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col space-y-4">
-              <input {...register('name', { required: true })} placeholder="Venue Name" />
-              <textarea {...register('description', { required: true })} placeholder="Description" />
-              <input {...register('mediaUrl')} placeholder="Media URL (optional)" />
-              <input {...register('mediaAlt')} placeholder="Media Alt Text (optional)" />
-              <input type="number" {...register('price', { required: true })} placeholder="Price" />
-              <input type="number" {...register('maxGuests', { required: true })} placeholder="Max Guests" />
-              <input type="number" {...register('rating')} placeholder="Rating (optional)" />
-              <label>
-                <input type="checkbox" {...register('wifi')} />
-                Wifi (optional)
-              </label>
-              <label>
-                <input type="checkbox" {...register('parking')} />
-                Parking (optional)
-              </label>
-              <label>
-                <input type="checkbox" {...register('breakfast')} />
-                Breakfast (optional)
-              </label>
-              <label>
-                <input type="checkbox" {...register('pets')} />
-                Pets (optional)
-              </label>
-              <input {...register('address')} placeholder="Address (optional)" />
-              <input {...register('city')} placeholder="City (optional)" />
-              <input {...register('zip')} placeholder="Zip (optional)" />
-              <input {...register('country')} placeholder="Country (optional)" />
-              <input {...register('continent')} placeholder="Continent (optional)" />
-              <input type="number" {...register('lat')} placeholder="Latitude (optional)" />
-              <input type="number" {...register('lng')} placeholder="Longitude (optional)" />
-              <div className="mt-4">
-                <button type="submit" disabled={loading} className='bg-teal-500 text-white font-bold py-2 px-4 rounded'>
-                  {loading ? 'Updating...' : 'Update Venue'}
-                </button>
-              </div>
-            </div>
-            <ModalClose onClick={onClose} />
-          </form>
-          </ScrollArea.Viewport>
-        <ScrollArea.Scrollbar
-          className="flex select-none touch-none p-0.5 bg-gray-200 transition-colors duration-[160ms] ease-out hover:bg-gray-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-          orientation="vertical">
-          <ScrollArea.Thumb className="flex-1 bg-gray-00 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
-        </ScrollArea.Scrollbar>
-        <ScrollArea.Scrollbar className="flex select-none touch-none p-0.5 bg-gray-200 transition-colors duration-[160ms] ease-out hover:bg-gray-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5">
-          <ScrollArea.Thumb className="flex-1 bg-gray-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
-        </ScrollArea.Scrollbar>
-        <ScrollArea.Corner className=" bg-gray-600" />
-      </ScrollArea.Root>
+          <ScrollArea.Root className="w-full h-[400px] rounded overflow-hidden">
+            <ScrollArea.Viewport className="w-full h-full rounded">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex flex-col space-y-4">
+                  <input {...register('name', { required: true })} placeholder="Venue Name" />
+                  <textarea {...register('description', { required: true })} placeholder="Description" />
+                  <input {...register('mediaUrl')} placeholder="Media URL (optional)" />
+                  <input {...register('mediaAlt')} placeholder="Media Alt Text (optional)" />
+                  <input type="number" {...register('price', { required: true })} placeholder="Price" />
+                  <input type="number" {...register('maxGuests', { required: true })} placeholder="Max Guests" />
+                  <input type="number" {...register('rating')} placeholder="Rating (optional)" />
+                  <label>
+                    <input type="checkbox" {...register('wifi')} />
+                    Wifi (optional)
+                  </label>
+                  <label>
+                    <input type="checkbox" {...register('parking')} />
+                    Parking (optional)
+                  </label>
+                  <label>
+                    <input type="checkbox" {...register('breakfast')} />
+                    Breakfast (optional)
+                  </label>
+                  <label>
+                    <input type="checkbox" {...register('pets')} />
+                    Pets (optional)
+                  </label>
+                  <input {...register('address')} placeholder="Address (optional)" />
+                  <input {...register('city')} placeholder="City (optional)" />
+                  <input {...register('zip')} placeholder="Zip (optional)" />
+                  <input {...register('country')} placeholder="Country (optional)" />
+                  <input {...register('continent')} placeholder="Continent (optional)" />
+                  <input type="number" {...register('lat')} placeholder="Latitude (optional)" />
+                  <input type="number" {...register('lng')} placeholder="Longitude (optional)" />
+                  <div className="mt-4">
+                    <button type="submit" disabled={loading} className='bg-teal-500 text-white font-bold py-2 px-4 rounded'>
+                      {loading ? 'Updating...' : 'Update Venue'}
+                    </button>
+                  </div>
+                </div>
+                <ModalClose onClick={onClose} />
+              </form>
+            </ScrollArea.Viewport>
+            <ScrollArea.Scrollbar
+              className="flex select-none touch-none p-0.5 bg-gray-200 transition-colors duration-[160ms] ease-out hover:bg-gray-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+              orientation="vertical">
+              <ScrollArea.Thumb className="flex-1 bg-gray-00 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+            </ScrollArea.Scrollbar>
+            <ScrollArea.Scrollbar className="flex select-none touch-none p-0.5 bg-gray-200 transition-colors duration-[160ms] ease-out hover:bg-gray-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5">
+              <ScrollArea.Thumb className="flex-1 bg-gray-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+            </ScrollArea.Scrollbar>
+            <ScrollArea.Corner className=" bg-gray-600" />
+          </ScrollArea.Root>
         </ModalContent>
       </ModalOverlay>
     </Modal>
