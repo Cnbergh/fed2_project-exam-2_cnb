@@ -7,9 +7,17 @@ import Card from '@/components/ui/card';
 import Container from '@/components/container';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 
+interface Venue {
+  id: string;
+  name: string;
+  description: string;
+  media: { url: string; alt: string }[];
+  price: number;
+  maxGuests: number;}
+
 const VenuesPage = () => {
   const { fetchVenues, searchVenues } = useApi();
-  const [venues, setVenues] = useState([]);
+  const [venues, setVenues] = useState<Venue[]>([]);
   const searchParams = useSearchParams();
 
   useEffect(() => {
