@@ -26,15 +26,13 @@ import Link from "next/link";
 // next router
 import { useRouter } from "next/navigation";
 
-// components
-
 
 //My Nav
 const NavMenu = () => {
   const router = useRouter();
   const pathname = router.pathname;
   return (
-    <div className="pt-2">
+    <div className="pl-1">
     <nav className="bg-white border-[1px] w-full md:w-auto py-2 rounded-full shadow-sm hover:shadow-ms transition cursor-pointer">
       {/* inner */}
       <div
@@ -53,7 +51,7 @@ const NavMenu = () => {
               <div className="hidden lg:block">{link.name}</div>
 
               {/* icon */}
-              <div className="pl-1 lg:pl-2">{link.icon}</div>
+              <div className="pb-1 pl-1 lg:pl-2">{link.icon}</div>
             </Link>
           );
         })}

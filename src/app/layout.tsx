@@ -1,13 +1,13 @@
 import './globals.css';
 import '@radix-ui/themes/styles.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Bebas_Neue } from 'next/font/google';
 import { Theme } from '@radix-ui/themes';
 import Header from '@/components/header/header';
 import ToasterProvider from '@/components/providers/toaster_provider';
 import { AuthProvider } from '@/components/providers/auth_context';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Bebas_Neue({ subsets: ['latin'], weight:'400' });
 
 export const metadata: Metadata = {
   title: 'Create Next App',

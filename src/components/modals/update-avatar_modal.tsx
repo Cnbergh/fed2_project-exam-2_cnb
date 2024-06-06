@@ -10,9 +10,6 @@ const UpdateAvatarModal = ({ isOpen, onClose }) => {
       <ModalOverlay>
         <ModalContent title="Update Avatar">
           <UpdateAvatar onClose={onClose} />
-          <ModalClose>
-            <Cross1Icon />
-          </ModalClose>
         </ModalContent>
       </ModalOverlay>
     </Modal>

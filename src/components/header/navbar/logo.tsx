@@ -6,7 +6,7 @@ import * as Avatar from '@radix-ui/react-avatar';
 const Logo = () => {
   const router = useRouter();
   return (
-    <div className="flex pl-3 pt-2">
+    <div className="flex pl-3">
     <Avatar.Root className="bg-white inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full align-middle">
         <Avatar.Image
         onClick={() => router.push('/')}

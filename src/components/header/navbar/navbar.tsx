@@ -8,7 +8,7 @@ import UserMenu from './user-menu';
 const Navbar = () => {
   return (
     <div className="w-full">
-      <div className="py-4">
+      <div className="py-1">
         <div
           className="flex
             flex-row

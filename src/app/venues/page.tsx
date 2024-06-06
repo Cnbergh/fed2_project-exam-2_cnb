@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useApi } from '@/api/api';
 import Card from '@/components/ui/card';
 import Container from '@/components/container';
+import * as ScrollArea from '@radix-ui/react-scroll-area';
 
 const VenuesPage = () => {
   const { fetchVenues, searchVenues } = useApi();
@@ -36,16 +37,33 @@ const VenuesPage = () => {
   }, [searchParams]);
 
   return (
-    <main className="pt-28 bg-slate-50">
+    <div className='m-2'>
+    <main className="pt-16 bg-slate-50 rounded-3xl mx-auto">
       <Container>
-        <h1 className="text-3xl font-bold mb-8">Venues</h1>
+        <ScrollArea.Root className="w-full h-dvh rounded-2xl overflow-hidden">
+        <ScrollArea.Viewport className="w-full h-full rounded">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {venues.map((venue) => (
             <Card key={venue.id} venue={venue} />
           ))}
         </div>
+        </ScrollArea.Viewport>
+        <ScrollArea.Scrollbar
+      className="flex select-none touch-none p-0.5 bg-gray-200 transition-colors duration-[160ms] ease-out hover:bg-gray-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+      orientation="vertical"
+    >
+      <ScrollArea.Thumb className="flex-1 bg-gray-00 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+    </ScrollArea.Scrollbar>
+    <ScrollArea.Scrollbar
+      className="flex select-none touch-none p-0.5 bg-gray-200 transition-colors duration-[160ms] ease-out hover:bg-gray-300 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+    >
+      <ScrollArea.Thumb className="flex-1 bg-gray-400 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+    </ScrollArea.Scrollbar>
+    <ScrollArea.Corner className=" bg-gray-600" />
+        </ScrollArea.Root>
       </Container>
     </main>
+    </div>
   );
 };
 

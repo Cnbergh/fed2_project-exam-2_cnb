@@ -3,11 +3,13 @@ import VenueManagerDashboard from './venue-manager_dashboard';
 
 const VenueManagerPage = () => {
   return (
-    <main className="pt-28 bg-slate-50">
+    <div className="m-2">
+    <main className="pt-16 bg-slate-50 rounded-3xl">
       <Container>
         <VenueManagerDashboard />
       </Container>
     </main>
+    </div>
   );
 };
 

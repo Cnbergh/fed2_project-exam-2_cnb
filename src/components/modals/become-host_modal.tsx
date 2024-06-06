@@ -46,15 +46,12 @@ const BecomeHostModal = ({ isOpen, onClose }) => {
             <p>Are you sure you want to become a host? This will allow you to manage your own venues.</p>
             <button
               onClick={handleBecomeHost}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              className="bg-teal-500 text-white font-bold py-2 px-4 rounded w-full"
               disabled={loading}
             >
               {loading ? 'Updating...' : 'Yes, Become a Host'}
             </button>
           </div>
-          <ModalClose>
-            <Cross1Icon />
-          </ModalClose>
         </ModalContent>
       </ModalOverlay>
     </Modal>

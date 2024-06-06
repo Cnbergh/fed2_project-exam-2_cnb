@@ -5,7 +5,7 @@ import React from 'react';
 const BookingList = ({ bookings }) => {
   return (
     <div className="mt-4">
-      <h2 className="text-xl font-bold mb-2">Bookings</h2>
+      <h2 className="text-xl font-bold mb-2">Bookings for Selected Venue</h2>
       {bookings.length === 0 ? (
         <p>No bookings found for this venue.</p>
       ) : (

@@ -18,7 +18,7 @@ const Calendar: React.FC<CalendarProps> = ({
   onChange,
 }) => {
   return (
-    <div>
+    <div className='p-4'>
       <h2 className="text-2xl font-bold">Available Dates</h2>
       <DateRange
         rangeColors={["#43A8BC"]}

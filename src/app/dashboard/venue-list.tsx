@@ -14,19 +14,19 @@ const VenueList = ({ venues, onVenueClick, onEditVenue, onDeleteVenue }) => {
               <h2 className="text-xl font-bold">{venue.name}</h2>
               <p>{venue.description}</p>
               <button
-                className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition mt-2"
+                className=" text-black px-2 py-1 rounded hover:bg-gray-200 transition mt-2"
                 onClick={() => onVenueClick(venue.id)}
               >
                 View Bookings
               </button>
               <button
-                className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 transition mt-2 ml-2"
+                className="text-black px-2 py-1 rounded hover:bg-gray-200 transition mt-2"
                 onClick={() => onEditVenue(venue)}
               >
                 Edit
               </button>
               <button
-                className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition mt-2 ml-2"
+                className="text-black px-2 py-1 rounded hover:bg-gray-200 transition mt-2"
                 onClick={() => onDeleteVenue(venue.id)}
               >
                 Delete

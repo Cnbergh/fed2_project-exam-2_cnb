@@ -60,7 +60,7 @@ const UserMenu = () => {
   };
 
   return (
-    <div className="relative bg-white">
+    <div className="relative bg-white rounded-3xl">
       <div className="flex items-center gap-3">
         <div
           onClick={handleBecomeHost}

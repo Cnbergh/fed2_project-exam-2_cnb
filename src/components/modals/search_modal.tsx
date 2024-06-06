@@ -70,9 +70,6 @@ const SearchModal = ({ isOpen, onClose }) => {
               Search
             </button>
           </div>
-          <ModalClose>
-            <Cross1Icon />
-          </ModalClose>
         </ModalContent>
       </ModalOverlay>
     </Modal>

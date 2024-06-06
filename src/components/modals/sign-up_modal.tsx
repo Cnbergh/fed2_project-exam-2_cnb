@@ -101,11 +101,10 @@ const SignUpModal = ({ isOpen, onClose }) => {
               </label>
             </div>
             <div className="mt-4">
-              <button type="submit" disabled={isLoading}>
+              <button type="submit" disabled={isLoading} className='bg-teal-500 text-white font-bold py-2 px-4 rounded w-full'>
                 Continue
               </button>
             </div>
-            <ModalClose onClick={onClose}>Cancel</ModalClose>
           </form>
         </ModalContent>
       </ModalOverlay>
