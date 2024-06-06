@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useApi } from '@/api/api';
 import { useAuth } from '@/components/providers/auth_context';
 import toast from 'react-hot-toast';
+import { User } from '@/lib/types';
 
 interface BecomeHostModalProps {
   isOpen: boolean;
@@ -28,9 +29,14 @@ const BecomeHostModal: React.FC<BecomeHostModalProps> = ({ isOpen, onClose }) =>
       }
       
       const profileData = { venueManager: true };
-      const response = await updateProfile(authState.user?.name, profileData);
+      const response = await updateProfile(authState.user?.name as string, profileData);
       console.log('Profile update response:', response);
-      saveUserData({ ...authState, user: { ...authState.user, venueManager: true } });
+      
+      const updatedUser: User = {
+        ...authState.user,
+        venueManager: true,
+      };
+      saveUserData({ ...authState, user: updatedUser });
       toast.success('You are now a venue manager!');
       onClose();
     } catch (error) {
