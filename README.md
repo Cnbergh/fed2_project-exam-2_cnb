@@ -16,21 +16,84 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Deployed on Vercel
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Technical Restrictions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The company CTO has set the following technical restrictions:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Must use an approved JavaScript Framework
+Must use an approved CSS Framework
+Must be hosted on an approved Static Host
+Must use an approved Design Application
+Must use an approved Planning Application
 
-## Deploy on Vercel
+## Approved Resources
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This list covers libraries and services that have been vetted by the company and approved for use.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## JavaScript Frameworks
+
+React (>16)
+NextJS
+
+## CSS Frameworks
+
+Bootstrap (>5)
+Tailwind (>3)
+MUI (>5)
+Styled Components/ Wmotion
+CSS Modules
+Radix UI
+
+## Hosting Services
+
+GitHub Pages
+Netlify
+Vercel
+Render
+
+## Design Applications
+
+Figma
+
+## Planning Applications
+
+Trello
+GitHub Projects
+Figma
+
+## User Stories
+
+The client has specified the following requirements in the form of User Stories:
+
+A user may view a list of Venues
+A user may search for a specific Venue
+A user may view a specific Venue page by id
+A user may view a calendar with available dates for a Venue
+A user with a stud.noroff.no email may register as a customer
+A registered customer may create a booking at a Venue
+A registered customer may view their upcoming bookings
+A user with a stud.noroff.no email may register as a Venue manager
+A registered Venue manager may create a Venue
+A registered Venue manager may update a Venue they manage
+A registered Venue manager may delete a Venue they manage
+A registered Venue manager may view bookings for a Venue they manage
+A registered user may login
+A registered user may update their avatar
+A registered user may logout
+
+
+## Project Inspiration and Goals
+The aim of this project was to create a venue management website inspired by Airbnb, with a strong emphasis on ensuring the application functions seamlessly across all devices. This focus on responsiveness and usability across different platforms ensures that users have a consistent and intuitive experience whether they are using the app on a desktop, tablet, or smartphone. The design and functionality were crafted to provide a user-friendly interface for both venue managers and guests, facilitating easy navigation, booking, and venue management.
+
+## Technologies Used
+React
+Next.js
+Tailwind CSS
+React Hook Form
+React Hot Toast
+Radix UI
+
