@@ -13,6 +13,7 @@ import { useAuth } from '@/components/providers/auth_context';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
+
 const UserMenu = () => {
   const { authState, logoutUser } = useAuth();
   const [isOpen, setIsOpen] = useState(false);

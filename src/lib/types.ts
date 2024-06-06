@@ -2,7 +2,11 @@
 export interface User {
     name: string;
     email: string;
-    avatar?: string;
+    avatar?: {
+      url: string;
+      alt?: string;
+    };
+    venueManager?: boolean;
   }
   
   export interface AuthState {
