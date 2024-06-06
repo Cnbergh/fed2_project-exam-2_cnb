@@ -6,7 +6,12 @@ import Modal, { ModalOverlay, ModalContent, ModalClose } from './modal';
 import toast from 'react-hot-toast';
 import { useApi } from '../../api/api';
 
-const SignUpModal = ({ isOpen, onClose }) => {
+interface SignUpModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { registerUser, loginUser } = useApi();
 
@@ -47,16 +52,17 @@ const SignUpModal = ({ isOpen, onClose }) => {
       toast.success('Logged in successfully');
 
       onClose();
-    } catch (error) {
-      // Try to parse the error message from the response
+    } catch (error: unknown) {
       let errorMessage = 'Something went wrong';
-      try {
-        const errorData = JSON.parse(error.message);
-        if (errorData.errors && errorData.errors.length > 0) {
-          errorMessage = errorData.errors[0].message;
+      if (error instanceof Error) {
+        try {
+          const errorData = JSON.parse(error.message);
+          if (errorData.errors && errorData.errors.length > 0) {
+            errorMessage = errorData.errors[0].message;
+          }
+        } catch (e) {
+          console.error('Failed to parse error message:', e);
         }
-      } catch (e) {
-        console.error('Failed to parse error message:', e);
       }
       toast.error(errorMessage);
     } finally {
@@ -72,36 +78,30 @@ const SignUpModal = ({ isOpen, onClose }) => {
             <div className="flex flex-col space-y-4">
               <input
                 id="email"
-                label="Email"
                 disabled={isLoading}
                 {...register('email', { required: true })}
                 placeholder="Email"
               />
               <input
                 id="name"
-                label="Name"
                 disabled={isLoading}
                 {...register('name', { required: true })}
                 placeholder="Name"
               />
               <input
                 id="password"
-                label="Password"
                 type="password"
                 disabled={isLoading}
                 {...register('password', { required: true })}
                 placeholder="Password"
               />
               <label>
-                <input
-                  type="checkbox"
-                  {...register('venueManager')}
-                />
+                <input type="checkbox" {...register('venueManager')} />
                 Register as Venue Manager
               </label>
             </div>
             <div className="mt-4">
-              <button type="submit" disabled={isLoading} className='bg-teal-500 text-white font-bold py-2 px-4 rounded w-full'>
+              <button type="submit" disabled={isLoading} className="bg-teal-500 text-white font-bold py-2 px-4 rounded w-full">
                 Continue
               </button>
             </div>
