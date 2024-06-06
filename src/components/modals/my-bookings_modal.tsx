@@ -7,11 +7,23 @@ import { useApi } from '@/api/api';
 import { useAuth } from '@/components/providers/auth_context';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 
-const MyBookingsModal = ({ isOpen, onClose }) => {
+interface MyBookingsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+interface Booking {
+  id: string;
+  dateFrom: string;
+  dateTo: string;
+  guests: number;
+}
+
+const MyBookingsModal: React.FC<MyBookingsModalProps> = ({ isOpen, onClose }) => {
   const { fetchBookingsByProfile, deleteBooking } = useApi();
   const { authState } = useAuth();
-  const [bookings, setBookings] = useState([]);
-  const [fetchError, setFetchError] = useState(null);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [fetchError, setFetchError] = useState<{ message: string } | null>(null);
 
   const fetchBookings = async () => {
     try {
@@ -32,13 +44,13 @@ const MyBookingsModal = ({ isOpen, onClose }) => {
         console.error('No user name found');
         setFetchError({ message: 'No user name found' });
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching bookings:', error);
-      setFetchError(error);
+      setFetchError(error as { message: string });
     }
   };
 
-  const handleDelete = async (bookingId) => {
+  const handleDelete = async (bookingId: string) => {
     try {
       await deleteBooking(bookingId);
       await fetchBookings();
