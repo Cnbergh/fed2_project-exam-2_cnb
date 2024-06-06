@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useApi } from '@/api/api';
 import Card from '@/components/ui/card';
@@ -56,6 +56,7 @@ const VenuesPage = () => {
     <div className='m-2'>
       <main className="pt-16 bg-slate-50 rounded-3xl mx-auto">
         <Container>
+      <Suspense fallback={<div>Loading...</div>}>
           <ScrollArea.Root className="w-full h-dvh rounded-2xl overflow-hidden">
             <ScrollArea.Viewport className="w-full h-full rounded">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -84,6 +85,7 @@ const VenuesPage = () => {
             </ScrollArea.Scrollbar>
             <ScrollArea.Corner className=" bg-gray-600" />
           </ScrollArea.Root>
+          </Suspense>
         </Container>
       </main>
     </div>
