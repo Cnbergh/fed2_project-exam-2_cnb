@@ -13,7 +13,13 @@ interface Venue {
   description: string;
   media: { url: string; alt: string }[];
   price: number;
-  maxGuests: number;}
+  maxGuests: number;
+  location: {
+    city: string;
+    country: string;
+  };
+  category: string;
+}
 
 const VenuesPage = () => {
   const { fetchVenues, searchVenues } = useApi();
@@ -57,7 +63,7 @@ const VenuesPage = () => {
                   <Card
                     key={venue.id}
                     venue={venue}
-                    reservation={null} // Provide a default value if not available
+                    reservation={undefined} // Provide undefined if not available
                     onAction={() => {}} // Provide a default empty function
                     disabled={false} // Provide a default value
                     actionLabel="" // Provide a default empty string
