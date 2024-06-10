@@ -45,9 +45,9 @@ const VenueList: React.FC<VenueListProps> = ({ venues, onVenueClick, onEditVenue
             <li key={venue.id} className="border p-2 rounded">
               <p className="font-bold">{venue.name}</p>
               <p>{venue.description}</p>
-              <button onClick={() => onVenueClick(venue.id)}>View</button>
-              <button onClick={() => onEditVenue(venue)}>Edit</button>
-              <button onClick={() => onDeleteVenue(venue.id)}>Delete</button>
+              <button onClick={() => onVenueClick(venue.id)} className='p-1'>View</button>
+              <button onClick={() => onEditVenue(venue)} className='p-1'>Edit</button>
+              <button onClick={() => onDeleteVenue(venue.id)} className='p-1'>Delete</button>
             </li>
           ))}
         </ul>
