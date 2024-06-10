@@ -9,7 +9,7 @@ const ClientVenues = dynamic(() => import('@/components/ClientVenues'), { ssr: f
 const VenuesPage = () => {
   return (
     <div className='m-2'>
-      <main className="pt-16 bg-slate-50 rounded-3xl mx-auto">
+      <main className="pt-16 bg-slate-50 rounded-3xl mx-auto max-w-[1780px]">
         <Container>
           <Suspense fallback={<div>Loading...</div>}>
             <ClientVenues />
